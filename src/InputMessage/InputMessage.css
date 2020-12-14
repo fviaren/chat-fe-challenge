@@ -1,0 +1,19 @@
+.InputBlock {
+    background-color: #3798d4;
+    padding: 8px;
+}
+
+.SendButton {
+    background-color: #ff876d;
+    color: white;
+    border: solid 1px #ff876d;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.MessageField {
+    padding: 8px;
+    margin: 8px;
+    border: solid 1px #2e77a4;
+    border-radius: 4px;
+}

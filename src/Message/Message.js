@@ -1,11 +1,12 @@
 import React from 'react';
+import './Message.css'
 
 const message = (props) => {
     return (
-        <div>
-            <p>{props.username}</p>
+        <div className="Message">
+            <p className="MessageInfo">{props.username}</p>
             <p>{props.messageText}</p>
-            <p>{props.timestamp}</p>
+            <p className="MessageInfo">{props.timestamp}</p>
         </div>
     )
 }
