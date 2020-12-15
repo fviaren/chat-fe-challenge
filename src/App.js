@@ -1,9 +1,14 @@
 
 import React, { Component } from 'react';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+
 import './App.css';
 import Message from './Message/Message'
 import InputMessage from './InputMessage/InputMessage'
 import Background from './assets/body-bg.png'
+
+const { REACT_APP_TOKEN } = process.env
 
 class App extends Component {
   state = {
@@ -22,15 +27,45 @@ class App extends Component {
       })
   }
 
-  sendMessageHandler = () => {
-    console.log(this.state.newMessage)
-  }
+  // componentDidMount() {
+  //   axios.get('https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=' + process.env)
+  //     .then( response => {
+  //       const messages = response.data.map( message => {
+  //         return {
+  //           ...message,
+  //           id: uuidv4()
+  //         }
+  //       })   
+  //       this.setState({messages: messages})
+  //     })
+  //     .catch(error => {
+  //         console.log(error);
+  //     }
+  //   )
+  // } 
+
+  sendMessageHandler = (event) => {
+    axios({
+      url: 'https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0',
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'},
+        'token': process.env,
+      data: {
+        'message': this.state.newMessage,
+        'author' : 'Mora'
+      } 
+    })
+      .then(response => {console.log(response.data);})
+      .then(event => {event.target.reset()})
+      .catch(error => {console.log(error)});
+  };
   
   render() {
     const chatStyle = {
+      display: 'flex',
+      flexDirection: 'column',
       backgroundImage: 'url(' + Background + ')',
-      fontColor: 'blue'
-
     }
 
     let messages = (
@@ -48,7 +83,7 @@ class App extends Component {
     return (
       <div className="App" style={chatStyle}>
         {messages}
-        <InputMessage change={(event) => this.onChangeInput(event)} send={() => this.sendMessageHandler()}/>
+        <InputMessage change={(event) => this.onChangeInput(event)} send={(event) => this.sendMessageHandler(event)}/>
       </div>
     );
   }
