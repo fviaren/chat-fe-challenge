@@ -35,10 +35,11 @@ class App extends Component {
   };
 
   getPosts = (requestType) => {
-    let url='/?token=MhIK2k2oKcfE'
+    const token='MhIK2k2oKcfE'
+    let url=`/?token=${token}`
     if(requestType !== 'all') {
-      const timestampSince = moment().subtract(30, 'days').unix();
-      url = `/?since=${timestampSince}&limit=10&token=MhIK2k2oKcfE`;
+      const timestampSince = moment().unix();
+      url = `/?since=${timestampSince}&limit=10&token=${token}`;
     };
     axios.get(url)
       .then( response => {
