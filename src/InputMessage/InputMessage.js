@@ -9,6 +9,7 @@ const inputMessage = (props) => {
                 type="text"
                 placeholder="Message"
                 onChange={props.change}
+                value={props.value}
             />
             <button 
                 className="SendButton" 

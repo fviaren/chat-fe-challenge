@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import './Message.css'
 
 const message = (props) => {
-    let MessageStyle = "Message";
-    if (props.username) {
-        MessageStyle= MessageStyle + ' MessageReceived'
+    let MessageStyle = "MessageContainer";
+    let username = ''
+    if (props.username !== 'Me') {
+        MessageStyle= MessageStyle + ' MessageReceived';
+        username = props.username
     } else {
-        MessageStyle= MessageStyle + ' MessageSent'
+        MessageStyle= MessageStyle + ' MessageSent';
+
     }
     return (
         <div className={MessageStyle}>
-            <p className="MessageInfo">{props.username}</p>
-            <p>{props.messageText}</p>
-            <p className="MessageInfo">{props.timestamp}</p>
+            <div className='MessageCard'>
+                <p className="MessageInfo">{username}</p>
+                <p>{props.messageText}</p>
+                <p className="MessageInfo">{props.timestamp}</p>
+            </div>
         </div>
     )
 }
