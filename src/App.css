@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  max-height: 100%;
+  overflow-y:hidden;
 }
 
 .App-logo {
@@ -35,4 +37,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Chat {
+  overflow-y: scroll;
+  min-height: 90vh;
 }

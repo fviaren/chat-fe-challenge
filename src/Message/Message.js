@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Message.css'
 
 const message = (props) => {
@@ -9,7 +9,6 @@ const message = (props) => {
         username = props.username
     } else {
         MessageStyle= MessageStyle + ' MessageSent';
-
     }
     return (
         <div className={MessageStyle}>

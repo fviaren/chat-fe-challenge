@@ -1,5 +1,11 @@
-.InputBlock {
+.InputContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 10%;
     background-color: #3798d4;
+}
+
+.InputBlock {
     padding: 8px;
 }
 
@@ -16,4 +22,5 @@
     margin: 8px;
     border: solid 1px #2e77a4;
     border-radius: 4px;
+    min-width: 60%;
 }

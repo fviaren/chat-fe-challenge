@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { animateScroll } from 'react-scroll';
 
 import './App.css';
 import Message from './Message/Message';
@@ -11,48 +12,54 @@ import Background from './assets/body-bg.png';
 
 class App extends Component {
   
+  intervalID;
+  messagesEndRef = React.createRef();
+
   state = {
-    messages: [
-    ],
+    messages: [],
     newMessage: ""
+  };
+
+  componentDidMount() {
+    this.getPosts('all');
+  };
+
+  componentWillUnmount() {
+    clearTimeout(this.intervalID);
   };
 
   onChangeInput = (event) => { 
     this.setState({
-        newMessage: event.target.value
-      });
+      newMessage: event.target.value
+    });
   };
 
-  getPosts = () => {
-    axios.get('https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=MhIK2k2oKcfE')
+  getPosts = (requestType) => {
+    let url='/?token=MhIK2k2oKcfE'
+    if(requestType !== 'all') {
+      const timestampSince = moment().subtract(30, 'days').unix();
+      url = `/?since=${timestampSince}&limit=10&token=MhIK2k2oKcfE`;
+    };
+    axios.get(url)
       .then( response => {
         const messages = response.data.map( message => {
           return {
             username: message.author,
-            message: message.message,
+            message:  message.message,
             timestamp: message.timestamp,
             id: message._id
           }
         });   
         this.setState({messages: messages});
+        this.intervalID = setTimeout(this.getPosts.bind(this), 3000);
+        if(requestType === 'all') {this.scrollToBottom()};
       })
-      .catch(error => {
-          console.log(error);
-      }
-    );
+      .catch(error => {console.log(error)});
   }
-  
-  refreshScreen = () => {
-    this.getPosts()
-  }
-
-  componentDidMount() {
-    this.getPosts()
-  };
 
   sendMessageHandler = () => {
     axios({
-      url: 'https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0',
+      url: '/',
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -72,19 +79,27 @@ class App extends Component {
         const messages = [...this.state.messages, newMessage];
         this.setState({messages: messages});
         this.setState({newMessage: ''});
+        this.scrollToBottom();
       })
       .catch(error => {console.log(error)});  
   };
   
+  scrollToBottom() {
+    animateScroll.scrollToBottom({
+      containerId: 'chat'
+    });
+  };
+
   render() {
     const chatStyle = {
       display: 'flex',
       flexDirection: 'column',
-      backgroundImage: 'url(' + Background + ')',
-    }
+      backgroundImage: `url(${Background})`,
+      height: '100vh'
+    };
 
     let messages = (
-      <div>
+      <div className="Chat" id="chat">
         {this.state.messages.map((message, index) => {
           return <Message
           username={message.username}
@@ -95,17 +110,19 @@ class App extends Component {
       </div>
     )
     
+        
+
     return (
-      <div className="App" style={chatStyle}>
+      <div className="App" style={chatStyle} >
         {messages}
-        <InputMessage 
+        <InputMessage
           change={(event) => this.onChangeInput(event)} 
           send={() => this.sendMessageHandler()}
           value={this.state.newMessage}
         />
       </div>
     );
-  }
-}
+  };
+};
 
 export default App;
