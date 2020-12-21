@@ -9,16 +9,13 @@ import Message from './Message/Message';
 import InputMessage from './InputMessage/InputMessage';
 import Background from './assets/body-bg.png';
 
-
 class App extends Component {
-  
-  intervalID;
-  messagesEndRef = React.createRef();
-
   state = {
     messages: [],
     newMessage: ""
   };
+
+  intervalID;
 
   componentDidMount() {
     this.getPosts('all');
@@ -52,10 +49,13 @@ class App extends Component {
           }
         });   
         this.setState({messages: messages});
-        this.intervalID = setTimeout(this.getPosts.bind(this), 3000);
         if(requestType === 'all') {this.scrollToBottom()};
       })
-      .catch(error => {console.log(error)});
+      .catch(error => {console.log(error)})
+      .finally( () => {
+        this.intervalID = setTimeout(this.getPosts.bind(this), 3000);
+        }
+      )
   }
 
   sendMessageHandler = () => {
@@ -92,29 +92,21 @@ class App extends Component {
   };
 
   render() {
-    const chatStyle = {
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundImage: `url(${Background})`,
-      height: '100vh'
-    };
-
     let messages = (
       <div className="Chat" id="chat">
         {this.state.messages.map((message, index) => {
           return <Message
-          username={message.username}
-          messageText={message.message}
-          timestamp={moment(message.timestamp).format('D MMM yyyy H:mm')}
-          key={message.id} />
+            username={message.username}
+            messageText={message.message}
+            timestamp={moment(message.timestamp).format('D MMM yyyy H:mm')}
+            key={message.id} 
+          />
         })}
       </div>
-    )
-    
-        
+    )   
 
     return (
-      <div className="App" style={chatStyle} >
+      <div className="App" style={{backgroundImage: `url(${Background})`}} >
         {messages}
         <InputMessage
           change={(event) => this.onChangeInput(event)} 
