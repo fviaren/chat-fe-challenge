@@ -1,0 +1,4 @@
+.Chat {
+    overflow-y: scroll;
+    min-height: 90vh;
+  }
