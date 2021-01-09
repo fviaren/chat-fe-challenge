@@ -8,22 +8,18 @@ export const getMessages = (requestType) => {
         const timestampSince = moment().unix();
         url = `/?since=${timestampSince}&limit=10&token=${token}`;
     };
-    axios.get(url)
-        .then( response => {
-            const messages = response.data.map( message => {
-                return {
-                    username: message.author,
-                    message:  message.message,
-                    timestamp: message.timestamp,
-                    id: message._id
-                }
-            });   
-        })
+    return axios.get(url)
+        .then(response => response.data.map(message => ({
+                username: message.author,
+                message:  message.message,
+                timestamp: message.timestamp,
+                id: message._id
+        })))
         .catch(error => {console.log(error)})
 }
 
 export const postMessage = (newMessage, author) => {
-    axios({
+    return axios({
         url: '/',
         method: 'post',
         headers: {
@@ -32,16 +28,15 @@ export const postMessage = (newMessage, author) => {
         data: {
             'message': newMessage,
             'author' : author
-        } 
+        }
+    }).then( response => {
+        const message = response.data;
+        return {
+            username: message.author,
+            messageText: message.message,
+            timestamp: message.timestamp,
+            id: message._id
+        }
     })
-        .then( response => {
-            const message = response.data;
-            return {
-                username: message.author,
-                messageText: message.message,
-                timestamp: message.timestamp,
-                id: message._id
-            }
-        })
-        .catch(error => {console.log(error)});
-    }
+    .catch(error => {console.log(error)});
+}

@@ -14,11 +14,11 @@ class Messages extends Component {
     intervalID;
 
     componentDidMount() {
-        let messages = getMessages('all');
-        this.setState({messages: messages});
-        console.log(this.state)
-        scrollToBottom()
-        this.setRefreshTimeout()
+        getMessages('all').then(messages => {
+            this.setState({ messages });
+            scrollToBottom()
+            this.setRefreshTimeout()
+        });
     };
 
     componentWillUnmount() {
@@ -26,9 +26,11 @@ class Messages extends Component {
     };
 
     getLastMessages = () => {
-        const lastMessages = getMessages()
-        this.setState({messages: lastMessages});
-        this.setRefreshTimeout()
+        getMessages().then(messages => {
+            console.log(messages);
+            this.setState({ messages });
+            this.setRefreshTimeout();
+        });
     };
 
     setRefreshTimeout = () => {
@@ -38,23 +40,23 @@ class Messages extends Component {
     render() {
         let messages;
         if(this.state.messages) {
-            messages = (    
+            messages = (
                 this.state.messages.map((message) => {
                     return <Message
                     username={message.username}
                     messageText={message.message}
                     timestamp={moment(message.timestamp).format('D MMM yyyy H:mm')}
-                    key={message.id} 
+                    key={message.id}
                     />
                 })
             )
         }
-        
+
         return (
             <div className={classes.Chat} id="chat">
                 {messages}
             </div>
-            
+
         );
     }
 }
