@@ -1,17 +1,17 @@
 import React from 'react';
-import classes from './Message.module.css'
+import classes from './Message.module.css';
+import ClassNames from 'classnames';
 
 const message = (props) => {
-    let MessageStyle = [classes.MessageContainer]
-    let username = ''
-    if (props.username !== 'Me') {
-        MessageStyle.push(classes.MessageReceived);
-        username = props.username
-    } else {
-        MessageStyle.push(classes.MessageSent);
-    }
+    
+    let username = props.username || '';
+    
     return (
-        <div className={MessageStyle.join(' ')}>
+        <div className={ClassNames({
+            [classes.MessageContainer]: true,
+            [classes.MessageReceived]: props.username !== 'Me',
+            [classes.MessageSent]: props.username === 'Me'
+        })}>
             <div className={classes.MessageCard}>
                 <p className={classes.MessageInfo}>{username}</p>
                 <p>{props.messageText}</p>

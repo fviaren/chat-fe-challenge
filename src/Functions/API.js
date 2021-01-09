@@ -4,10 +4,10 @@ import moment from 'moment';
 export const getMessages = (requestType) => {
     const token='MhIK2k2oKcfE'
     let url=`/?token=${token}`
-    if(requestType !== 'all') {
-        const timestampSince = moment().unix();
-        url = `/?since=${timestampSince}&limit=10&token=${token}`;
-    };
+    // if(requestType !== 'all') {
+    //     const timestampSince = moment().unix();
+    //     url = `/?since=${timestampSince}&limit=10&token=${token}`;
+    // };
     return axios.get(url)
         .then(response => response.data.map(message => ({
                 username: message.author,
