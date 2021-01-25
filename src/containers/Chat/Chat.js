@@ -29,7 +29,9 @@ class Chat extends Component {
 
     getMyMessages = (RequestType, scroll) => {
         getMessages(RequestType).then(messages => {
-            this.setState({ messages });
+            if ( this.state.messages !== messages ) {
+                this.setState({ messages });
+            };
             this.setRefreshTimeout();
             if (scroll === "True") {
                 scrollToBottom();

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import moment from 'moment';
 
 export const getMessages = (requestType) => {
     const token='MhIK2k2oKcfE'
